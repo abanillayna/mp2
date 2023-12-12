@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Login</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.container {
+  width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input, button {
+  margin-bottom: 15px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  cursor: pointer;
+  background-color: #FD9D3E;
+  color: #fff;
+  border: none;
+}
+
+button:hover {
+  background-color: #FD9D3E;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>User Login</h1>
+    <form id="loginForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+      
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Get form values
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  
+  // Retrieve user data from local storage
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  
+  // Check if user exists and credentials match
+  if (storedUser && storedUser.username === username && storedUser.password === password) {
+    // Save logged-in user to session storage for use in the index page
+    sessionStorage.setItem('loggedInUser', username);
+    
+    // Redirect to index page
+    window.location.href = 'index.html';
+  } else {
+    alert('Invalid username or password. Please try again.');
+  }
+  
+  // Clear form fields
+  document.getElementById('loginForm').reset();
+});
+
+  </script>
+</body>
+</html>

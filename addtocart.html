@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Catalog</title>
+</head>
+<body>
+  <div id="root">
+    <div class='box'>
+      <div class='img-box'>
+        <img class='images' src='image/gg-1.jpg'>
+      </div>
+      <div class='bottom'>
+        <p>Pizza 1</p>
+        <h2>$ 120.00</h2>
+        <div>
+          <button onclick='addtocart(0)'>Add to cart</button>
+          <input type='number' id='quantity0' value='1' min='1' style='width: 40px;'>
+        </div>
+      </div>
+    </div>
+  
+    <div class='box'>
+      <div class='img-box'>
+        <img class='images' src='image/hh-2.jpg'>
+      </div>
+      <div class='bottom'>
+        <p>Pizza 2</p>
+        <h2>$ 60.00</h2>
+        <div>
+          <button onclick='addtocart(1)'>Add to cart</button>
+          <input type='number' id='quantity1' value='1' min='1' style='width: 40px;'>
+        </div>
+      </div>
+    </div>
+    
+    <div class='box'>
+      <div class='img-box'>
+        <img class='images' src='image/ee-3.jpg'>
+      </div>
+      <div class='bottom'>
+        <p>Pizza 3</p>
+        <h2>$ 230.00</h2>
+        <div>
+          <button onclick='addtocart(2)'>Add to cart</button>
+          <input type='number' id='quantity2' value='1' min='1' style='width: 40px;'>
+        </div>
+      </div>
+    </div>
+    
+    <div class='box'>
+      <div class='img-box'>
+        <img class='images' src='image/aa-1.jpg'>
+      </div>
+      <div class='bottom'>
+        <p>Pizza 4</p>
+        <h2>$ 100.00</h2>
+        <div>
+          <button onclick='addtocart(3)'>Add to cart</button>
+          <input type='number' id='quantity3' value='1' min='1' style='width: 40px;'>
+        </div>
+      </div>
+    </div>
+    
+    <div class='box'>
+      <div class='img-box'>
+        <img class='images' src='image/aa-1.jpg'>
+      </div>
+      <div class='bottom'>
+        <p name="p">Pizza 5</p>
+        <h2 name="h2">$ 100.00</h2>
+        <div>
+          <button onclick='addtocart(4)'>Add to cart</button>
+          <input type='number' id='quantity4' value='1' min='1' style='width: 40px;'>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cart">
+    <h2>Cart (<span id="count">0</span>)</h2>
+    <div id="cartItem"></div>
+    <p id="total">$ 0.00</p>
+  </div>
+
+  <script>
+    var cart = [];
+
+    function addtocart(id) {
+      const selectedItem = {
+        id: id,
+        image: document.getElementsByClassName('images')[id].src,
+        title: document.getElementsByName('p')[id].innerText,
+        price: parseFloat(document.getElementsByName('h2')[id].innerText.slice(2))
+      };
+
+      const quantity = parseInt(document.getElementById(`quantity${id}`).value);
+      const existingItem = cart.find(item => item.id === id);
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push({ ...selectedItem, quantity });
+      }
+      
+      displaycart();
+    }
+
+    function delElement(index) {
+      cart.splice(index, 1);
+      displaycart();
+    }
+
+    function displaycart() {
+      let total = 0;
+      document.getElementById("count").innerHTML = cart.length;
+      const cartItems = cart.map((item, index) => {
+        var { image, title, price, quantity } = item;
+        total += price * quantity;
+        return (
+          `<div class='cart-item'>
+            <div class='row-img'>
+                <img class='rowimg' src=${image}>
+            </div>
+            <p style='font-size:12px;'>${title}</p>
+            <h2 style='font-size: 15px;'>$ ${price}.00 x ${quantity}</h2>
+            <div>
+              <button onclick='delElement(${index})' style='margin-right: 5px;'>Remove</button>
+              <input type='number' value='${quantity}' min='1' onchange='updateQuantity(${index}, this.value)' style='width: 40px;'>
+            </div>
+          </div>`
+        );
+      }).join('');
+      
+      document.getElementById("cartItem").innerHTML = cart.length === 0 ? "Your cart is empty" : cartItems;
+      document.getElementById("total").innerHTML = `$ ${total}.00`;
+    }
+
+    function updateQuantity(index, newQuantity) {
+      cart[index].quantity = parseInt(newQuantity);
+      displaycart();
+    }
+  </script>
+</body>
+</html>
